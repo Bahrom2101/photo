@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Unsplash Photos</string>
+    <string name="home">Home</string>
+    <string name="popular">Popular</string>
+    <string name="random">Random</string>
+    <string name="liked">Liked</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all">All</string>
+    <string name="animals">Animals</string>
+    <string name="technology">Technology</string>
+    <string name="nature">Nature</string>
+</resources>

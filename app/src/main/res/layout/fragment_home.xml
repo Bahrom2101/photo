@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,46 +7,30 @@
     android:background="@color/main"
     tools:context=".fragments.HomeFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="0dp"
-        android:fitsSystemWindows="true"
-        android:theme="@style/Theme.Photo"
-        app:elevation="0dp">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="false"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:toolbarId="@+id/toolbar">
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/main_dark"
-                android:overScrollMode="never"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tabGravity="center"
-                app:tabIndicatorColor="@color/white"
-                app:tabIndicatorHeight="0dp"
-                app:tabMode="scrollable"
-                app:tabRippleColor="@null"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextAppearance="@style/MineCustomTabText"
-                app:tabTextColor="@color/tab" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/_45sdp"
+        tools:listitem="@layout/item_photo" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <ProgressBar
+        android:id="@+id/progress1"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/progress2"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:visibility="gone" />
+
+</FrameLayout>

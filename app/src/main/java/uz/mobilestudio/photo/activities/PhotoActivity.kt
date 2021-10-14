@@ -27,6 +27,7 @@ import java.net.URL
 import java.util.*
 import android.os.*
 import uz.mobilestudio.photo.adpters.SliderAdapter
+import uz.mobilestudio.photo.fragments.HomeFragment.Companion.photos
 import uz.mobilestudio.photo.models.NetworkHelper
 import uz.mobilestudio.photo.models.api.all_photos.Photo
 import kotlin.collections.ArrayList
@@ -44,9 +45,7 @@ class PhotoActivity : AppCompatActivity() {
         binding = ActivityPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val photos = intent.getSerializableExtra("photos") as ArrayList<Photo>
         val position = intent.getIntExtra("position", 0)
-
 
         appDatabase = AppDatabase.getInstance(this)
 
@@ -64,9 +63,12 @@ class PhotoActivity : AppCompatActivity() {
             time
         )
 
+        println(photoDb.id)
+
         checkDb(photoDb.id)
 
-        sliderAdapter = SliderAdapter(photos)
+        sliderAdapter = SliderAdapter(photos, position)
+        binding.viewPager
         binding.viewPager.adapter = sliderAdapter
 
         binding.setBackground.setOnClickListener {
@@ -89,16 +91,16 @@ class PhotoActivity : AppCompatActivity() {
 
     private fun setBack(photoDb: PhotoDb) {
         try {
-            scope.launch {
-                if (NetworkHelper(this@PhotoActivity).isNetworkConnected()) {
+            if (NetworkHelper(this@PhotoActivity).isNetworkConnected()) {
+                scope.launch {
                     val url = URL(photoDb.urlRegular)
                     val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                     val wallpaperManager = WallpaperManager.getInstance(applicationContext)
                     wallpaperManager.setBitmap(bmp)
-                    Toast.makeText(this@PhotoActivity, "Image had set", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@PhotoActivity, "No Internet", Toast.LENGTH_SHORT).show()
                 }
+                Toast.makeText(this@PhotoActivity, "Image had set", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@PhotoActivity, "No Internet", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()

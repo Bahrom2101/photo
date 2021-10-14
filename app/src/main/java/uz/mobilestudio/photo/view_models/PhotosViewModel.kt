@@ -2,33 +2,83 @@ package uz.mobilestudio.photo.view_models
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.disposables.CompositeDisposable
 import uz.mobilestudio.photo.models.api.all_photos.Photo
 import uz.mobilestudio.photo.repositories.PhotosRepository
-import uz.mobilestudio.photo.retrofit.Common.ACCESS_KEY
+import uz.mobilestudio.photo.retrofit.Common.ACCESS_KEY1
+import uz.mobilestudio.photo.retrofit.Common.ACCESS_KEY2
+import uz.mobilestudio.photo.retrofit.Common.ACCESS_KEY3
 import uz.mobilestudio.photo.retrofit.Common.PER_PAGE
+import kotlin.random.Random
 
 class PhotosViewModel : ViewModel() {
 
     private val photosRepository = PhotosRepository()
 
     fun getPhotos(page: Int): LiveData<List<Photo>> {
-        return photosRepository.getPhotos(ACCESS_KEY, page, PER_PAGE)
+        return when (Random.nextInt(1, 4)) {
+            1 -> {
+                photosRepository.getPhotos(ACCESS_KEY1, page, PER_PAGE)
+            }
+            2 -> {
+                photosRepository.getPhotos(ACCESS_KEY2, page, PER_PAGE)
+            }
+            3 -> {
+                photosRepository.getPhotos(ACCESS_KEY3, page, PER_PAGE)
+            }
+            else -> {
+                photosRepository.getPhotos(ACCESS_KEY3, page, PER_PAGE)
+            }
+        }
     }
 
     fun getPopularPhotos(page: Int): LiveData<List<Photo>> {
-        return photosRepository.getPhotos(ACCESS_KEY, page, PER_PAGE, "popular")
-    }
-
-    fun getCollectionPhotos(collection_id: String, page: Int): LiveData<List<Photo>> {
-        return photosRepository.getCollectionPhotos(collection_id, ACCESS_KEY, page, PER_PAGE)
+        return when (Random.nextInt(1, 4)) {
+            1 -> {
+                photosRepository.getPhotos(ACCESS_KEY1, page, PER_PAGE, "popular")
+            }
+            2 -> {
+                photosRepository.getPhotos(ACCESS_KEY2, page, PER_PAGE, "popular")
+            }
+            3 -> {
+                photosRepository.getPhotos(ACCESS_KEY3, page, PER_PAGE, "popular")
+            }
+            else -> {
+                photosRepository.getPhotos(ACCESS_KEY3, page, PER_PAGE, "popular")
+            }
+        }
     }
 
     fun getSinglePhoto(photo_id: String): LiveData<Photo> {
-        return photosRepository.getSinglePhoto(photo_id, ACCESS_KEY)
+        return when (Random.nextInt(1, 4)) {
+            1 -> {
+                photosRepository.getSinglePhoto(photo_id, ACCESS_KEY1)
+            }
+            2 -> {
+                photosRepository.getSinglePhoto(photo_id, ACCESS_KEY2)
+            }
+            3 -> {
+                photosRepository.getSinglePhoto(photo_id, ACCESS_KEY3)
+            }
+            else -> {
+                photosRepository.getSinglePhoto(photo_id, ACCESS_KEY3)
+            }
+        }
     }
 
     fun getRandomPhoto(): LiveData<Photo> {
-        return photosRepository.getRandomPhoto(ACCESS_KEY)
+        return when (Random.nextInt(1, 4)) {
+            1 -> {
+                photosRepository.getRandomPhoto(ACCESS_KEY1)
+            }
+            2 -> {
+                photosRepository.getRandomPhoto(ACCESS_KEY2)
+            }
+            3 -> {
+                photosRepository.getRandomPhoto(ACCESS_KEY3)
+            }
+            else -> {
+                photosRepository.getRandomPhoto(ACCESS_KEY3)
+            }
+        }
     }
 }

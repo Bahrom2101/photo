@@ -25,9 +25,4 @@
         android:name="uz.mobilestudio.photo.fragments.LikedFragment"
         android:label="fragment_liked"
         tools:layout="@layout/fragment_liked" />
-    <fragment
-        android:id="@+id/photoFragment"
-        android:name="uz.mobilestudio.photo.fragments.PhotoFragment"
-        android:label="fragment_photo"
-        tools:layout="@layout/fragment_photo" />
 </navigation>

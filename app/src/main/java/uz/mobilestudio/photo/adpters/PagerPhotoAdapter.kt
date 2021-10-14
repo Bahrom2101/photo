@@ -17,6 +17,6 @@ class PagerPhotoAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return PagerPhotoFragment.newInstance(list, pos)
+        return PagerPhotoFragment.newInstance(list, pos+position)
     }
 }

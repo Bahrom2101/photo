@@ -1,4 +1,4 @@
-package uz.mobilestudio.photo.models.api
+package uz.mobilestudio.photo.models
 
 import android.content.Context
 import android.net.ConnectivityManager

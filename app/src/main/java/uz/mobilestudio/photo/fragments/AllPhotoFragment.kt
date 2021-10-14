@@ -54,14 +54,10 @@ class AllPhotoFragment : Fragment() {
         binding.rv.setHasFixedSize(true)
         rvAdapter = RvAdapter(requireContext(), photos, object : RvAdapter.OnClickListener {
             override fun onPhotoClick(position: Int, photo: Photo) {
-                val bundle = Bundle()
-                bundle.putSerializable("photos", photos)
-                bundle.putInt("position", position)
-                findNavController().navigate(R.id.photoFragment, bundle)
-//                val intent = Intent(requireContext(), PhotoActivity::class.java)
-//                intent.putExtra("photos", photos)
-//                intent.putExtra("position", position)
-//                requireContext().startActivity(intent)
+                val intent = Intent(requireContext(), PhotoActivity::class.java)
+                intent.putExtra("photos", photos)
+                intent.putExtra("position", position)
+                requireContext().startActivity(intent)
             }
         })
         binding.rv.adapter = rvAdapter

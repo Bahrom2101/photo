@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/layout/fragment_pager.xml" value="0.33958333333333335" />
         <entry key="app/src/main/res/layout/fragment_pager_photo.xml" value="0.33958333333333335" />
         <entry key="app/src/main/res/layout/fragment_photo.xml" value="0.33958333333333335" />
+        <entry key="app/src/main/res/layout/item_photo_slide.xml" value="0.33958333333333335" />
       </map>
     </option>
   </component>

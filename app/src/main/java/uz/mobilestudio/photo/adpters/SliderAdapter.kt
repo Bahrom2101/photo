@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import uz.mobilestudio.photo.databinding.ItemPhotoSlideBinding
 import uz.mobilestudio.photo.models.api.all_photos.Photo
 
-class SliderAdapter(var list: List<Photo>, var pos: Int) : PagerAdapter() {
+class SliderAdapter(var list: List<Photo>, var pos: Int, var listener: Listener) : PagerAdapter() {
 
     lateinit var binding: ItemPhotoSlideBinding
 
@@ -22,6 +22,9 @@ class SliderAdapter(var list: List<Photo>, var pos: Int) : PagerAdapter() {
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        if (position == list.size - 1) {
+            listener.onFinish()
+        }
         binding =
             ItemPhotoSlideBinding.inflate(LayoutInflater.from(container.context), container, false)
         if (list[position + pos].height / list[position + pos].width >= (1).toLong()) {
@@ -37,5 +40,9 @@ class SliderAdapter(var list: List<Photo>, var pos: Int) : PagerAdapter() {
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         val view = `object` as View
         container.removeView(view)
+    }
+
+    interface Listener {
+        fun onFinish()
     }
 }

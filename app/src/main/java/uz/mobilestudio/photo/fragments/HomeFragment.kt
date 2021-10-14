@@ -1,7 +1,9 @@
 package uz.mobilestudio.photo.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,10 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.android.material.tabs.TabLayoutMediator
 import uz.mobilestudio.photo.R
 import uz.mobilestudio.photo.activities.PhotoActivity
-import uz.mobilestudio.photo.adpters.MyPagerAdapter
 import uz.mobilestudio.photo.adpters.RvAdapter
 import uz.mobilestudio.photo.databinding.FragmentHomeBinding
 import uz.mobilestudio.photo.models.api.all_photos.Photo
@@ -35,15 +35,21 @@ class HomeFragment : Fragment() {
 
     companion object {
         lateinit var photos: ArrayList<Photo>
-        private var currentPagePhotos = 1
+        var currentPagePhotos = 1
+        var currentPos = 0
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "onCreateView: ")
         binding = FragmentHomeBinding.inflate(layoutInflater)
         photos = ArrayList()
+        photos.clear()
+        currentPagePhotos = 1
+
+        println(11111111111111)
 
         loadPhotos()
 
@@ -89,6 +95,8 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+//        binding.rv.smoothScrollToPosition(currentPos)
+        binding.rv.layoutManager?.scrollToPosition(currentPos)
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
         toolbar.title = getString(R.string.home)
     }

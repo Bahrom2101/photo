@@ -26,50 +26,88 @@ import java.lang.Exception
 import java.net.URL
 import java.util.*
 import android.os.*
+import android.util.Log
+import android.view.View
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import uz.mobilestudio.photo.adpters.SliderAdapter
+import uz.mobilestudio.photo.adpters.SliderRvAdapter
+import uz.mobilestudio.photo.fragments.HomeFragment
+import uz.mobilestudio.photo.fragments.HomeFragment.Companion.currentPos
 import uz.mobilestudio.photo.fragments.HomeFragment.Companion.photos
 import uz.mobilestudio.photo.models.NetworkHelper
 import uz.mobilestudio.photo.models.api.all_photos.Photo
+import uz.mobilestudio.photo.view_models.PhotosViewModel
 import kotlin.collections.ArrayList
 
 class PhotoActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityPhotoBinding
     lateinit var appDatabase: AppDatabase
-    lateinit var viewModel: PhotoDbViewModel
-    lateinit var sliderAdapter: SliderAdapter
+    lateinit var viewModel: PhotosViewModel
+    lateinit var sliderRvAdapter: SliderRvAdapter
     private val scope = CoroutineScope(CoroutineName("MyScope"))
+    private val TAG = "HomeFragment1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val position = intent.getIntExtra("position", 0)
+        Log.d(TAG, "====================================")
+
+        val pos = intent.getIntExtra("position", 0)
+
+        currentPos = pos
 
         appDatabase = AppDatabase.getInstance(this)
 
         val calendar = Calendar.getInstance()
         val time = calendar.time.time
-        val photoDb = PhotoDb(
-            photos[position].id,
-            photos[position].width,
-            photos[position].height,
-            photos[position].urls.raw,
-            photos[position].urls.full,
-            photos[position].urls.regular,
-            photos[position].urls.small,
-            photos[position].urls.thumb,
+        var photoDb = PhotoDb(
+            photos[pos].id,
+            photos[pos].width,
+            photos[pos].height,
+            photos[pos].urls.raw,
+            photos[pos].urls.full,
+            photos[pos].urls.regular,
+            photos[pos].urls.small,
+            photos[pos].urls.thumb,
             time
         )
 
-        println(photoDb.id)
-
         checkDb(photoDb.id)
 
-        sliderAdapter = SliderAdapter(photos, position)
-        binding.viewPager
-        binding.viewPager.adapter = sliderAdapter
+        sliderRvAdapter =
+            SliderRvAdapter(this, photos, pos, object : SliderRvAdapter.Listener {
+                override fun onFinish() {
+                    HomeFragment.currentPagePhotos++
+                    binding.progress.visibility = View.VISIBLE
+                    loadPhotos()
+                }
+            })
+        binding.viewPager.adapter = sliderRvAdapter
+
+        binding.viewPager.setCurrentItem(pos,false)
+
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                currentPos = position
+                photoDb = PhotoDb(
+                    photos[position].id,
+                    photos[position].width,
+                    photos[position].height,
+                    photos[position].urls.raw,
+                    photos[position].urls.full,
+                    photos[position].urls.regular,
+                    photos[position].urls.small,
+                    photos[position].urls.thumb,
+                    time
+                )
+                checkDb(photoDb.id)
+                super.onPageSelected(position)
+            }
+        })
 
         binding.setBackground.setOnClickListener {
             setBack(photoDb)
@@ -87,6 +125,19 @@ class PhotoActivity : AppCompatActivity() {
             onDownloadClick(photoDb)
         }
 
+    }
+
+    private fun loadPhotos() {
+        viewModel = ViewModelProvider(this).get(PhotosViewModel::class.java)
+        viewModel.getPhotos(HomeFragment.currentPagePhotos)
+            .observe(this, androidx.lifecycle.Observer {
+                if (it != null) {
+                    binding.progress.visibility = View.GONE
+                    val oldCount = photos.size
+                    photos.addAll(it)
+                    sliderRvAdapter.notifyItemRangeInserted(oldCount, photos.size)
+                }
+            })
     }
 
     private fun setBack(photoDb: PhotoDb) {
@@ -115,6 +166,8 @@ class PhotoActivity : AppCompatActivity() {
             .subscribe({
                 if (it == 1) {
                     binding.like.setImageResource(R.drawable.like)
+                } else {
+                    binding.like.setImageResource(R.drawable.ic_like)
                 }
             }, {
 
@@ -193,5 +246,11 @@ class PhotoActivity : AppCompatActivity() {
             .subscribe({
                 binding.like.setImageResource(R.drawable.like)
             }, {})
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.viewPager.unregisterOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {})
     }
 }

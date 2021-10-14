@@ -35,6 +35,8 @@ class RandomFragment : Fragment() {
         binding.effect.visibility = View.GONE
         binding.like.visibility = View.GONE
 
+        println(33333333333333333)
+
         loadPhoto()
 
         return binding.root

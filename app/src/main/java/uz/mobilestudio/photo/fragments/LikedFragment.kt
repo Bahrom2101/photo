@@ -42,6 +42,8 @@ class LikedFragment : Fragment() {
 
         appDatabase = AppDatabase.getInstance(requireContext())
 
+        println(44444444444444444)
+
         photosDb = ArrayList()
 
         return binding.root

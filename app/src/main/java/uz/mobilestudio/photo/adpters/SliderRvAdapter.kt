@@ -1,0 +1,64 @@
+package uz.mobilestudio.photo.adpters
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import uz.mobilestudio.photo.databinding.ItemPhotoSlideBinding
+import uz.mobilestudio.photo.models.api.all_photos.Photo
+import kotlin.math.abs
+
+class SliderRvAdapter(
+    var context: Context,
+    var list: List<Photo>,
+    var pos: Int,
+    var listener: Listener
+) :
+    RecyclerView.Adapter<SliderRvAdapter.Vh>() {
+
+    inner class Vh(var binding: ItemPhotoSlideBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun onBind(position: Int) {
+            if (position == list.size) {
+                listener.onFinish()
+            }
+            if (list[position].height / list[position].width >= (1).toLong()) {
+                binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
+            } else {
+                binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
+            }
+            Glide.with(context).load(list[position].urls.regular).into(binding.image)
+//            if (position == list.size - pos) {
+//                listener.onFinish()
+//            }
+//            if (position + pos < list.size) {
+//                if (list[position + pos].height / list[position + pos].width >= (1).toLong()) {
+//                    binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
+//                } else {
+//                    binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
+//                }
+//                Glide.with(context).load(list[pos + position].urls.regular).into(binding.image)
+//            } else if (abs(position - pos) >= 0) {
+//
+//            }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Vh {
+        return Vh(ItemPhotoSlideBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    }
+
+    override fun onBindViewHolder(holder: Vh, position: Int) {
+        holder.onBind(position)
+    }
+
+    override fun getItemCount(): Int {
+        return list.size
+    }
+
+    interface Listener {
+        fun onFinish()
+    }
+}

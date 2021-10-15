@@ -43,13 +43,10 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "onCreateView: ")
         binding = FragmentHomeBinding.inflate(layoutInflater)
         photos = ArrayList()
         photos.clear()
         currentPagePhotos = 1
-
-        println(11111111111111)
 
         loadPhotos()
 

@@ -9,8 +9,13 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.os.Environment
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -18,64 +23,60 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import uz.mobilestudio.photo.R
-import uz.mobilestudio.photo.databinding.ActivityPhotoBinding
+import uz.mobilestudio.photo.adpters.SliderRvAdapter
+import uz.mobilestudio.photo.databinding.ActivityPopularPhotoBinding
 import uz.mobilestudio.photo.db.AppDatabase
 import uz.mobilestudio.photo.entity.PhotoDb
+import uz.mobilestudio.photo.fragments.PopularFragment.Companion.currentPopularPagePhotos
+import uz.mobilestudio.photo.fragments.PopularFragment.Companion.currentPopularPos
+import uz.mobilestudio.photo.fragments.PopularFragment.Companion.popularPhotos
+import uz.mobilestudio.photo.models.NetworkHelper
+import uz.mobilestudio.photo.view_models.PhotosViewModel
 import java.io.File
 import java.lang.Exception
 import java.net.URL
 import java.util.*
-import android.os.*
-import android.view.View
-import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
-import uz.mobilestudio.photo.adpters.SliderRvAdapter
-import uz.mobilestudio.photo.fragments.HomeFragment
-import uz.mobilestudio.photo.fragments.HomeFragment.Companion.currentPos
-import uz.mobilestudio.photo.fragments.HomeFragment.Companion.photos
-import uz.mobilestudio.photo.models.NetworkHelper
-import uz.mobilestudio.photo.view_models.PhotosViewModel
 
-class PhotoActivity : AppCompatActivity() {
+class PopularPhotoActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityPhotoBinding
+    lateinit var binding: ActivityPopularPhotoBinding
     lateinit var appDatabase: AppDatabase
     lateinit var viewModel: PhotosViewModel
     lateinit var sliderRvAdapter: SliderRvAdapter
-    private val scope = CoroutineScope(CoroutineName("MyScope"))
-    private val TAG = "HomeFragment1"
+    private val scope = CoroutineScope(CoroutineName("MyScope1"))
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPhotoBinding.inflate(layoutInflater)
+        binding = ActivityPopularPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val pos = intent.getIntExtra("position", 0)
 
-        currentPos = pos
+        currentPopularPos = pos
 
         appDatabase = AppDatabase.getInstance(this)
 
         val calendar = Calendar.getInstance()
         val time = calendar.time.time
         var photoDb = PhotoDb(
-            photos[pos].id,
-            photos[pos].width,
-            photos[pos].height,
-            photos[pos].urls.raw,
-            photos[pos].urls.full,
-            photos[pos].urls.regular,
-            photos[pos].urls.small,
-            photos[pos].urls.thumb,
+            popularPhotos[pos].id,
+            popularPhotos[pos].width,
+            popularPhotos[pos].height,
+            popularPhotos[pos].urls.raw,
+            popularPhotos[pos].urls.full,
+            popularPhotos[pos].urls.regular,
+            popularPhotos[pos].urls.small,
+            popularPhotos[pos].urls.thumb,
             time
         )
 
         checkDb(photoDb.id)
 
         sliderRvAdapter =
-            SliderRvAdapter(this, photos, pos, object : SliderRvAdapter.Listener {
+            SliderRvAdapter(this, popularPhotos, pos, object : SliderRvAdapter.Listener {
                 override fun onFinish() {
-                    HomeFragment.currentPagePhotos++
+                    currentPopularPagePhotos++
                     binding.progress.visibility = View.VISIBLE
                     loadPhotos()
                 }
@@ -86,16 +87,16 @@ class PhotoActivity : AppCompatActivity() {
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                currentPos = position
+                currentPopularPos = position
                 photoDb = PhotoDb(
-                    photos[position].id,
-                    photos[position].width,
-                    photos[position].height,
-                    photos[position].urls.raw,
-                    photos[position].urls.full,
-                    photos[position].urls.regular,
-                    photos[position].urls.small,
-                    photos[position].urls.thumb,
+                    popularPhotos[position].id,
+                    popularPhotos[position].width,
+                    popularPhotos[position].height,
+                    popularPhotos[position].urls.raw,
+                    popularPhotos[position].urls.full,
+                    popularPhotos[position].urls.regular,
+                    popularPhotos[position].urls.small,
+                    popularPhotos[position].urls.thumb,
                     time
                 )
                 checkDb(photoDb.id)
@@ -138,29 +139,29 @@ class PhotoActivity : AppCompatActivity() {
 
     private fun loadPhotos() {
         viewModel = ViewModelProvider(this).get(PhotosViewModel::class.java)
-        viewModel.getPhotos(HomeFragment.currentPagePhotos)
+        viewModel.getPhotos(currentPopularPagePhotos)
             .observe(this, androidx.lifecycle.Observer {
                 if (it != null) {
                     binding.progress.visibility = View.GONE
-                    val oldCount = photos.size
-                    photos.addAll(it)
-                    sliderRvAdapter.notifyItemRangeInserted(oldCount, photos.size)
+                    val oldCount = popularPhotos.size
+                    popularPhotos.addAll(it)
+                    sliderRvAdapter.notifyItemRangeInserted(oldCount, popularPhotos.size)
                 }
             })
     }
 
     private fun setBack(photoDb: PhotoDb) {
         try {
-            if (NetworkHelper(this@PhotoActivity).isNetworkConnected()) {
+            if (NetworkHelper(this).isNetworkConnected()) {
                 scope.launch {
                     val url = URL(photoDb.urlRegular)
                     val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                     val wallpaperManager = WallpaperManager.getInstance(applicationContext)
                     wallpaperManager.setBitmap(bmp)
                 }
-                Toast.makeText(this@PhotoActivity, "Image had set", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Image had set", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@PhotoActivity, "No Internet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No Internet", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()

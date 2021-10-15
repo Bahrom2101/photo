@@ -30,19 +30,6 @@ class SliderRvAdapter(
                 binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
             }
             Glide.with(context).load(list[position].urls.regular).into(binding.image)
-//            if (position == list.size - pos) {
-//                listener.onFinish()
-//            }
-//            if (position + pos < list.size) {
-//                if (list[position + pos].height / list[position + pos].width >= (1).toLong()) {
-//                    binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
-//                } else {
-//                    binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
-//                }
-//                Glide.with(context).load(list[pos + position].urls.regular).into(binding.image)
-//            } else if (abs(position - pos) >= 0) {
-//
-//            }
         }
     }
 

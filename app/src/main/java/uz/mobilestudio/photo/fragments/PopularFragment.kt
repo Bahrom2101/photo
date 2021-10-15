@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import uz.mobilestudio.photo.R
 import uz.mobilestudio.photo.activities.PhotoActivity
+import uz.mobilestudio.photo.activities.PopularPhotoActivity
 import uz.mobilestudio.photo.adpters.RvAdapter
 import uz.mobilestudio.photo.databinding.FragmentPopularBinding
 import uz.mobilestudio.photo.entity.PhotoDb
@@ -32,19 +33,22 @@ class PopularFragment : Fragment() {
     lateinit var binding: FragmentPopularBinding
     lateinit var viewModel: PhotosViewModel
     lateinit var rvAdapter: RvAdapter
-    lateinit var photos: ArrayList<Photo>
-    private var currentPagePhotos = 1
     private val TAG = "HomeFragment1"
+
+    companion object {
+        lateinit var popularPhotos: ArrayList<Photo>
+        var currentPopularPagePhotos = 1
+        var currentPopularPos = 0
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPopularBinding.inflate(layoutInflater)
-
-        photos = ArrayList()
-
-        println(222222222222)
+        popularPhotos = ArrayList()
+        popularPhotos.clear()
+        currentPopularPagePhotos = 1
 
         loadPopularPhotos()
 
@@ -53,23 +57,10 @@ class PopularFragment : Fragment() {
         binding.rv.itemAnimator = null
         binding.rv.layoutManager = layoutManager
         binding.rv.setHasFixedSize(true)
-        rvAdapter = RvAdapter(requireContext(), photos, object : RvAdapter.OnClickListener {
+        rvAdapter = RvAdapter(requireContext(), popularPhotos, object : RvAdapter.OnClickListener {
             override fun onPhotoClick(position:Int,photo: Photo) {
-                val calendar = Calendar.getInstance()
-                val time = calendar.time.time
-                val photoDb = PhotoDb(
-                    photo.id,
-                    photo.width,
-                    photo.height,
-                    photo.urls.raw,
-                    photo.urls.full,
-                    photo.urls.regular,
-                    photo.urls.small,
-                    photo.urls.thumb,
-                    time
-                )
-                val intent = Intent(requireContext(), PhotoActivity::class.java)
-                intent.putExtra("photoDb", photoDb)
+                val intent = Intent(requireContext(), PopularPhotoActivity::class.java)
+                intent.putExtra("position", position)
                 requireContext().startActivity(intent)
             }
         })
@@ -80,7 +71,7 @@ class PopularFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!binding.rv.canScrollVertically(1)) {
                     binding.progress2.visibility = View.VISIBLE
-                    currentPagePhotos++
+                    currentPopularPagePhotos++
                     loadPopularPhotos()
                 }
             }
@@ -91,19 +82,20 @@ class PopularFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        binding.rv.layoutManager?.scrollToPosition(currentPopularPos)
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
         toolbar.title = getString(R.string.popular)
     }
 
     private fun loadPopularPhotos() {
         viewModel = ViewModelProvider(this).get(PhotosViewModel::class.java)
-        viewModel.getPopularPhotos(currentPagePhotos).observe(viewLifecycleOwner, Observer {
+        viewModel.getPopularPhotos(currentPopularPagePhotos).observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 binding.progress1.visibility = View.GONE
                 binding.progress2.visibility = View.GONE
-                val oldCount = photos.size
-                photos.addAll(it)
-                rvAdapter.notifyItemRangeInserted(oldCount, photos.size)
+                val oldCount = popularPhotos.size
+                popularPhotos.addAll(it)
+                rvAdapter.notifyItemRangeInserted(oldCount, popularPhotos.size)
             }
         })
     }

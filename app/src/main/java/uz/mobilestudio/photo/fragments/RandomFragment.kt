@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,8 +36,6 @@ class RandomFragment : Fragment() {
         binding.effect.visibility = View.GONE
         binding.like.visibility = View.GONE
 
-        println(33333333333333333)
-
         loadPhoto()
 
         return binding.root
@@ -52,6 +51,11 @@ class RandomFragment : Fragment() {
                 binding.setBackground.visibility = View.VISIBLE
                 binding.effect.visibility = View.VISIBLE
                 binding.like.visibility = View.VISIBLE
+                if (it.height / it.width >= (1).toLong()) {
+                    binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
+                } else {
+                    binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
+                }
                 Glide.with(this).load(it.urls.regular).into(binding.image)
             }
         })

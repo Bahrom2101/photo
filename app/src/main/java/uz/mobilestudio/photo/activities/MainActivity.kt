@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
-    lateinit var lastFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,44 +26,45 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        lastFragment = HomeFragment()
+        var lastFragment = Fragment()
 
         val homeFragment = HomeFragment()
         val popularFragment = PopularFragment()
         val randomFragment = RandomFragment()
         val likedFragment = LikedFragment()
-        supportFragmentManager.beginTransaction().add(R.id.container,homeFragment).commit()
-        supportFragmentManager.beginTransaction().add(R.id.container,popularFragment).commit()
-        supportFragmentManager.beginTransaction().add(R.id.container,randomFragment).commit()
         supportFragmentManager.beginTransaction().add(R.id.container,likedFragment).commit()
-        supportFragmentManager.beginTransaction().hide(popularFragment).commit()
-        supportFragmentManager.beginTransaction().hide(randomFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container,randomFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container,popularFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container,homeFragment).commit()
         supportFragmentManager.beginTransaction().hide(likedFragment).commit()
-        supportFragmentManager.beginTransaction().show(homeFragment).commit()
+        supportFragmentManager.beginTransaction().hide(randomFragment).commit()
+        supportFragmentManager.beginTransaction().hide(popularFragment).commit()
+
+        lastFragment = homeFragment
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
                     supportFragmentManager.beginTransaction().hide(lastFragment).commit()
-                    lastFragment = HomeFragment()
+                    lastFragment = homeFragment
                     supportFragmentManager.beginTransaction().show(lastFragment).commit()
                     true
                 }
                 R.id.popular -> {
                     supportFragmentManager.beginTransaction().hide(lastFragment).commit()
-                    lastFragment = PopularFragment()
+                    lastFragment = popularFragment
                     supportFragmentManager.beginTransaction().show(lastFragment).commit()
                     true
                 }
                 R.id.random -> {
                     supportFragmentManager.beginTransaction().hide(lastFragment).commit()
-                    lastFragment = RandomFragment()
+                    lastFragment = randomFragment
                     supportFragmentManager.beginTransaction().show(lastFragment).commit()
                     true
                 }
                 R.id.like -> {
                     supportFragmentManager.beginTransaction().hide(lastFragment).commit()
-                    lastFragment = LikedFragment()
+                    lastFragment = likedFragment
                     supportFragmentManager.beginTransaction().show(lastFragment).commit()
                     true
                 }

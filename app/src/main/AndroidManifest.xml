@@ -4,7 +4,7 @@
     package="uz.mobilestudio.photo">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -17,6 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Photo">
+        <activity
+            android:name=".activities.PopularPhotoActivity"
+            android:exported="true" />
         <activity
             android:name=".activities.PhotoActivity"
             android:exported="true" />

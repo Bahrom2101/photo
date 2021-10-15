@@ -5,17 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main"
-    tools:context=".fragments.RandomFragment">
+    tools:context=".activities.PopularPhotoActivity">
 
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/image"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitCenter" />
+        android:orientation="horizontal" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_15sdp"
+            android:background="@drawable/background_button_image"
+            android:padding="@dimen/_11sdp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/share"
@@ -80,7 +92,6 @@
             android:src="@drawable/ic_like"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
@@ -89,5 +100,6 @@
         android:layout_height="@dimen/_25sdp"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_20sdp"
-        android:visibility="visible" />
+        android:visibility="gone" />
+
 </FrameLayout>

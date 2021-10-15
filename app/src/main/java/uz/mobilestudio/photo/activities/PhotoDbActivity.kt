@@ -9,8 +9,13 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.os.Environment
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -18,86 +23,56 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import uz.mobilestudio.photo.R
-import uz.mobilestudio.photo.databinding.ActivityPhotoBinding
+import uz.mobilestudio.photo.adpters.SliderDbAdapter
+import uz.mobilestudio.photo.adpters.SliderRvAdapter
+import uz.mobilestudio.photo.databinding.ActivityPhotoDbBinding
 import uz.mobilestudio.photo.db.AppDatabase
 import uz.mobilestudio.photo.entity.PhotoDb
+import uz.mobilestudio.photo.fragments.HomeFragment
+import uz.mobilestudio.photo.fragments.LikedFragment.Companion.currentPhotoDbPos
+import uz.mobilestudio.photo.fragments.LikedFragment.Companion.photosDb
+import uz.mobilestudio.photo.models.NetworkHelper
+import uz.mobilestudio.photo.view_models.PhotosViewModel
 import java.io.File
 import java.lang.Exception
 import java.net.URL
 import java.util.*
-import android.os.*
-import android.view.View
-import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
-import uz.mobilestudio.photo.adpters.SliderRvAdapter
-import uz.mobilestudio.photo.fragments.HomeFragment
-import uz.mobilestudio.photo.fragments.HomeFragment.Companion.currentPos
-import uz.mobilestudio.photo.fragments.HomeFragment.Companion.photos
-import uz.mobilestudio.photo.models.NetworkHelper
-import uz.mobilestudio.photo.view_models.PhotosViewModel
 
-class PhotoActivity : AppCompatActivity() {
+class PhotoDbActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityPhotoBinding
+    lateinit var binding: ActivityPhotoDbBinding
     lateinit var appDatabase: AppDatabase
-    lateinit var viewModel: PhotosViewModel
-    lateinit var sliderRvAdapter: SliderRvAdapter
-    private val scope = CoroutineScope(CoroutineName("MyScope"))
-    private val TAG = "HomeFragment1"
+    lateinit var sliderDbAdapter: SliderDbAdapter
+    private val scope = CoroutineScope(CoroutineName("MyScope3"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPhotoBinding.inflate(layoutInflater)
+        binding = ActivityPhotoDbBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         val pos = intent.getIntExtra("position", 0)
 
-        currentPos = pos
+        currentPhotoDbPos = pos
 
         appDatabase = AppDatabase.getInstance(this)
 
         val calendar = Calendar.getInstance()
         val time = calendar.time.time
-        var photoDb = PhotoDb(
-            photos[pos].id,
-            photos[pos].width,
-            photos[pos].height,
-            photos[pos].urls.raw,
-            photos[pos].urls.full,
-            photos[pos].urls.regular,
-            photos[pos].urls.small,
-            photos[pos].urls.thumb,
-            time
-        )
+        var photoDb = photosDb[pos]
 
         checkDb(photoDb.id)
 
-        sliderRvAdapter =
-            SliderRvAdapter(this, photos, object : SliderRvAdapter.Listener {
-                override fun onFinish() {
-                    HomeFragment.currentPagePhotos++
-                    binding.progress.visibility = View.VISIBLE
-                    loadPhotos()
-                }
-            })
-        binding.viewPager.adapter = sliderRvAdapter
+        sliderDbAdapter =
+            SliderDbAdapter(this, photosDb)
+        binding.viewPager.adapter = sliderDbAdapter
 
         binding.viewPager.setCurrentItem(pos,false)
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                currentPos = position
-                photoDb = PhotoDb(
-                    photos[position].id,
-                    photos[position].width,
-                    photos[position].height,
-                    photos[position].urls.raw,
-                    photos[position].urls.full,
-                    photos[position].urls.regular,
-                    photos[position].urls.small,
-                    photos[position].urls.thumb,
-                    time
-                )
+                currentPhotoDbPos = position
+                photoDb = photosDb[position]
                 checkDb(photoDb.id)
                 super.onPageSelected(position)
             }
@@ -125,6 +100,7 @@ class PhotoActivity : AppCompatActivity() {
 
     }
 
+
     private fun onShareClick(photoDb: PhotoDb) {
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
@@ -136,31 +112,18 @@ class PhotoActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
-    private fun loadPhotos() {
-        viewModel = ViewModelProvider(this).get(PhotosViewModel::class.java)
-        viewModel.getPhotos(HomeFragment.currentPagePhotos)
-            .observe(this, androidx.lifecycle.Observer {
-                if (it != null) {
-                    binding.progress.visibility = View.GONE
-                    val oldCount = photos.size
-                    photos.addAll(it)
-                    sliderRvAdapter.notifyItemRangeInserted(oldCount, photos.size)
-                }
-            })
-    }
-
     private fun setBack(photoDb: PhotoDb) {
         try {
-            if (NetworkHelper(this@PhotoActivity).isNetworkConnected()) {
+            if (NetworkHelper(this).isNetworkConnected()) {
                 scope.launch {
                     val url = URL(photoDb.urlRegular)
                     val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                     val wallpaperManager = WallpaperManager.getInstance(applicationContext)
                     wallpaperManager.setBitmap(bmp)
                 }
-                Toast.makeText(this@PhotoActivity, "Image had set", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Image had set", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@PhotoActivity, "No Internet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No Internet", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()

@@ -13,11 +13,11 @@ class RvAdapterDb(val context: Context, var list: List<PhotoDb>, var onClickList
     RecyclerView.Adapter<RvAdapterDb.ViewHolder>() {
     inner class ViewHolder(var itemPhotoBinding: ItemPhotoBinding) :
         RecyclerView.ViewHolder(itemPhotoBinding.root) {
-        fun onBind(photoDb: PhotoDb) {
+        fun onBind(photoDb: PhotoDb,position: Int) {
             Glide.with(context).load(photoDb.urlSmall).into(itemPhotoBinding.image)
 
             itemPhotoBinding.root.setOnClickListener {
-                onClickListener.onPhotoClick(photoDb)
+                onClickListener.onPhotoClick(photoDb,position)
             }
         }
     }
@@ -33,7 +33,7 @@ class RvAdapterDb(val context: Context, var list: List<PhotoDb>, var onClickList
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(list[position])
+        holder.onBind(list[position],position)
     }
 
     override fun getItemCount(): Int {
@@ -41,6 +41,6 @@ class RvAdapterDb(val context: Context, var list: List<PhotoDb>, var onClickList
     }
 
     interface OnClickListener {
-        fun onPhotoClick(photoDb: PhotoDb)
+        fun onPhotoClick(photoDb: PhotoDb,position: Int)
     }
 }

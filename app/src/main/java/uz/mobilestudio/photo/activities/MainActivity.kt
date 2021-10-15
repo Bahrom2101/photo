@@ -3,6 +3,7 @@ package uz.mobilestudio.photo.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -45,24 +46,32 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
+                    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+                    toolbar.title = getString(R.string.home)
                     supportFragmentManager.beginTransaction().hide(lastFragment).commit()
                     lastFragment = homeFragment
                     supportFragmentManager.beginTransaction().show(lastFragment).commit()
                     true
                 }
                 R.id.popular -> {
+                    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+                    toolbar.title = getString(R.string.popular)
                     supportFragmentManager.beginTransaction().hide(lastFragment).commit()
                     lastFragment = popularFragment
                     supportFragmentManager.beginTransaction().show(lastFragment).commit()
                     true
                 }
                 R.id.random -> {
+                    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+                    toolbar.title = getString(R.string.random)
                     supportFragmentManager.beginTransaction().hide(lastFragment).commit()
                     lastFragment = randomFragment
                     supportFragmentManager.beginTransaction().show(lastFragment).commit()
                     true
                 }
                 R.id.like -> {
+                    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+                    toolbar.title = getString(R.string.liked)
                     supportFragmentManager.beginTransaction().hide(lastFragment).commit()
                     lastFragment = likedFragment
                     supportFragmentManager.beginTransaction().show(lastFragment).commit()

@@ -74,7 +74,7 @@ class PopularPhotoActivity : AppCompatActivity() {
         checkDb(photoDb.id)
 
         sliderRvAdapter =
-            SliderRvAdapter(this, popularPhotos, pos, object : SliderRvAdapter.Listener {
+            SliderRvAdapter(this, popularPhotos, object : SliderRvAdapter.Listener {
                 override fun onFinish() {
                     currentPopularPagePhotos++
                     binding.progress.visibility = View.VISIBLE

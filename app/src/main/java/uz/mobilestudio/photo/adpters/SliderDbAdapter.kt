@@ -7,28 +7,25 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import uz.mobilestudio.photo.databinding.ItemPhotoSlideBinding
+import uz.mobilestudio.photo.entity.PhotoDb
 import uz.mobilestudio.photo.models.api.all_photos.Photo
 import kotlin.math.abs
 
-class SliderRvAdapter(
+class SliderDbAdapter(
     var context: Context,
-    var list: List<Photo>,
-    var listener: Listener
+    var list: List<PhotoDb>,
 ) :
-    RecyclerView.Adapter<SliderRvAdapter.Vh>() {
+    RecyclerView.Adapter<SliderDbAdapter.Vh>() {
 
     inner class Vh(var binding: ItemPhotoSlideBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(position: Int) {
-            if (position == list.size) {
-                listener.onFinish()
-            }
             if (list[position].height / list[position].width >= (1).toLong()) {
                 binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
             } else {
                 binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
             }
-            Glide.with(context).load(list[position].urls.regular).into(binding.image)
+            Glide.with(context).load(list[position].urlRegular).into(binding.image)
         }
     }
 
@@ -42,9 +39,5 @@ class SliderRvAdapter(
 
     override fun getItemCount(): Int {
         return list.size
-    }
-
-    interface Listener {
-        fun onFinish()
     }
 }

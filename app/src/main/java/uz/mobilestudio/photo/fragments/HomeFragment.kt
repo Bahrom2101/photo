@@ -47,6 +47,7 @@ class HomeFragment : Fragment() {
         photos = ArrayList()
         photos.clear()
         currentPagePhotos = 1
+        currentPos = 0
 
         loadPhotos()
 

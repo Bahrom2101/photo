@@ -49,6 +49,7 @@ class PopularFragment : Fragment() {
         popularPhotos = ArrayList()
         popularPhotos.clear()
         currentPopularPagePhotos = 1
+        currentPopularPos = 0
 
         loadPopularPhotos()
 

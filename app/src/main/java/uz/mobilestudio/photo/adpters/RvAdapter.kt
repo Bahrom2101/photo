@@ -14,7 +14,6 @@ class RvAdapter(val context: Context, var list: List<Photo>, var onClickListener
         RecyclerView.ViewHolder(itemPhotoBinding.root) {
         fun onBind(position: Int, photo: Photo) {
             Glide.with(context).load(photo.urls.small).into(itemPhotoBinding.image)
-
             itemPhotoBinding.root.setOnClickListener {
                 onClickListener.onPhotoClick(position, photo)
             }

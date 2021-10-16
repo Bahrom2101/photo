@@ -3,6 +3,7 @@ package uz.mobilestudio.photo.view_models
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import uz.mobilestudio.photo.models.api.all_photos.Photo
+import uz.mobilestudio.photo.models.api.search.SearchResponse
 import uz.mobilestudio.photo.repositories.PhotosRepository
 import uz.mobilestudio.photo.retrofit.Common.ACCESS_KEY1
 import uz.mobilestudio.photo.retrofit.Common.ACCESS_KEY2
@@ -66,7 +67,7 @@ class PhotosViewModel : ViewModel() {
     }
 
 
-    fun getSearchedPhotos(page: Int,query:String): LiveData<List<Photo>> {
+    fun getSearchedPhotos(page: Int,query:String): LiveData<SearchResponse> {
         return when (Random.nextInt(1, 4)) {
             1 -> {
                 photosRepository.getSearchedPhotos(ACCESS_KEY1, page, PER_PAGE, query)

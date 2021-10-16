@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import uz.mobilestudio.photo.models.api.all_photos.Photo
+import uz.mobilestudio.photo.models.api.search.SearchResponse
 import uz.mobilestudio.photo.retrofit.Common
 import uz.mobilestudio.photo.retrofit.RetrofitService
 
@@ -75,15 +76,15 @@ class PhotosRepository {
         page: Int,
         per_page: Int,
         query: String
-    ): LiveData<List<Photo>> {
-        val data = MutableLiveData<List<Photo>>()
+    ): LiveData<SearchResponse> {
+        val data = MutableLiveData<SearchResponse>()
         retrofitService.getSearchedPhotos(client_id, page, per_page, query)
-            .enqueue(object : Callback<List<Photo>> {
-                override fun onResponse(call: Call<List<Photo>>, response: Response<List<Photo>>) {
+            .enqueue(object : Callback<SearchResponse> {
+                override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
                     data.value = response.body()
                 }
 
-                override fun onFailure(call: Call<List<Photo>>, t: Throwable) {
+                override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                     data.value = null
                 }
             })

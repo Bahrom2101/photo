@@ -2,10 +2,9 @@ package uz.mobilestudio.photo.retrofit
 
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 import uz.mobilestudio.photo.models.api.all_photos.Photo
-import uz.mobilestudio.photo.models.api.collection.CollectionsResponse
+import uz.mobilestudio.photo.models.api.search.SearchResponse
 
 interface RetrofitService {
 
@@ -35,5 +34,5 @@ interface RetrofitService {
         @Query("page") page: Int,
         @Query("per_page") per_page: Int,
         @Query("query") query: String
-    ) : Call<List<Photo>>
+    ) : Call<SearchResponse>
 }

@@ -10,6 +10,7 @@
 
     <color name="main">#0F293F</color>
     <color name="main_dark">#001327</color>
+    <color name="edit_back">#9C133C5E</color>
     <color name="tab">#7E8993</color>
     <color name="pink">#FF00DA</color>
     <color name="button_image_back">#794A4B4C</color>

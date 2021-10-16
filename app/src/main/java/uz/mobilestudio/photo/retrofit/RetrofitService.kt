@@ -24,30 +24,16 @@ interface RetrofitService {
         @Query("order_by") order_by: String
     ): Call<List<Photo>>
 
-    @GET("search/collections")
-    fun getResponseSearchCollection(
-        @Query("client_id") client_id: String,
-        @Query("page") page: Int,
-        @Query("per_page") per_page: Int,
-        @Query("query") query: String,
-    ): Call<CollectionsResponse>
-
-    @GET("collections/{id}/photos")
-    fun getCollectionPhotos(
-        @Path("id") collection_id: String,
-        @Query("client_id") client_id: String,
-        @Query("page") page: Int,
-        @Query("per_page") per_page: Int
-    ) : Call<List<Photo>>
-
-    @GET("photos/{id}")
-    fun getSinglePhoto(
-        @Path("id") photo_id:String,
-        @Query("client_id") client_id: String
-        ): Call<Photo>
-
     @GET("photos/random")
     fun getRandomPhoto(
         @Query("client_id") client_id: String
-        ): Call<Photo>
+    ): Call<Photo>
+
+    @GET("search/photos")
+    fun getSearchedPhotos(
+        @Query("client_id") client_id: String,
+        @Query("page") page: Int,
+        @Query("per_page") per_page: Int,
+        @Query("query") query: String
+    ) : Call<List<Photo>>
 }

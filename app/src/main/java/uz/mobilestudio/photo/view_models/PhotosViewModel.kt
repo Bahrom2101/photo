@@ -48,23 +48,6 @@ class PhotosViewModel : ViewModel() {
         }
     }
 
-    fun getSinglePhoto(photo_id: String): LiveData<Photo> {
-        return when (Random.nextInt(1, 4)) {
-            1 -> {
-                photosRepository.getSinglePhoto(photo_id, ACCESS_KEY1)
-            }
-            2 -> {
-                photosRepository.getSinglePhoto(photo_id, ACCESS_KEY2)
-            }
-            3 -> {
-                photosRepository.getSinglePhoto(photo_id, ACCESS_KEY3)
-            }
-            else -> {
-                photosRepository.getSinglePhoto(photo_id, ACCESS_KEY3)
-            }
-        }
-    }
-
     fun getRandomPhoto(): LiveData<Photo> {
         return when (Random.nextInt(1, 4)) {
             1 -> {
@@ -81,4 +64,23 @@ class PhotosViewModel : ViewModel() {
             }
         }
     }
+
+
+    fun getSearchedPhotos(page: Int,query:String): LiveData<List<Photo>> {
+        return when (Random.nextInt(1, 4)) {
+            1 -> {
+                photosRepository.getSearchedPhotos(ACCESS_KEY1, page, PER_PAGE, query)
+            }
+            2 -> {
+                photosRepository.getSearchedPhotos(ACCESS_KEY2, page, PER_PAGE, query)
+            }
+            3 -> {
+                photosRepository.getSearchedPhotos(ACCESS_KEY3, page, PER_PAGE, query)
+            }
+            else -> {
+                photosRepository.getSearchedPhotos(ACCESS_KEY3, page, PER_PAGE, query)
+            }
+        }
+    }
+
 }

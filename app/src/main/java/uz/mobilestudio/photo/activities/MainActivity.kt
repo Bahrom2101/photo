@@ -1,8 +1,10 @@
 package uz.mobilestudio.photo.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -82,39 +84,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-//        navController = findNavController(R.id.my_nav_host_fragment)
-//
-//        binding.bottomNavigation.setupWithNavController(navController)
-//
-//        binding.bottomNavigation.setOnItemSelectedListener { it ->
-//            when (it.itemId) {
-//                R.id.home -> {
-//                    navController.saveState()
-//                    navController.popBackStack()
-//                    navController.navigate(R.id.homeFragment)
-//                    true
-//                }
-//                R.id.popular -> {
-//                    navController.popBackStack()
-//                    navController.navigate(R.id.popularFragment)
-//                    true
-//                }
-//                R.id.random -> {
-//                    navController.popBackStack()
-//                    navController.navigate(R.id.randomFragment)
-//                    true
-//                }
-//                R.id.like -> {
-//                    navController.popBackStack()
-//                    navController.navigate(R.id.likedFragment)
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.search -> {
+                val intent = Intent(this,SearchActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

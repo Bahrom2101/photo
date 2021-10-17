@@ -1,6 +1,5 @@
 package uz.mobilestudio.photo.activities
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,16 +8,12 @@ import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
 import uz.mobilestudio.photo.R
 import uz.mobilestudio.photo.databinding.ActivityMainBinding
 import uz.mobilestudio.photo.fragments.HomeFragment
 import uz.mobilestudio.photo.fragments.LikedFragment
 import uz.mobilestudio.photo.fragments.PopularFragment
 import uz.mobilestudio.photo.fragments.RandomFragment
-import java.io.File
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        var lastFragment = Fragment()
+        var lastFragment: Fragment
 
         val homeFragment = HomeFragment()
         val popularFragment = PopularFragment()

@@ -27,7 +27,7 @@ class SliderDbAdapter(
                 binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
             }
             Glide.with(context).load(list[position].urlRegular)
-                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(binding.image)
         }
     }

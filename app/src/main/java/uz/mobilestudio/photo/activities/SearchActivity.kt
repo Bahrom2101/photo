@@ -73,6 +73,10 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            loadSearchPhotos(query)
+        }
+
         binding.back.setOnClickListener {
             onBackPressed()
         }
@@ -117,6 +121,7 @@ class SearchActivity : AppCompatActivity() {
                 searchPhotos.addAll(it.photos)
                 rvAdapter.notifyItemRangeInserted(oldCount, searchPhotos.size)
             }
+            binding.swipeRefreshLayout.isRefreshing = false
         })
     }
 

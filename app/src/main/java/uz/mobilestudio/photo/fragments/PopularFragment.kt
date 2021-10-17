@@ -53,6 +53,10 @@ class PopularFragment : Fragment() {
 
         loadPopularPhotos()
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            loadPopularPhotos()
+        }
+
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
         binding.rv.itemAnimator = null
@@ -98,6 +102,7 @@ class PopularFragment : Fragment() {
                 popularPhotos.addAll(it)
                 rvAdapter.notifyItemRangeInserted(oldCount, popularPhotos.size)
             }
+            binding.swipeRefreshLayout.isRefreshing = false
         })
     }
 

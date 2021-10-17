@@ -51,6 +51,10 @@ class HomeFragment : Fragment() {
 
         loadPhotos()
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            loadPhotos()
+        }
+
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
         binding.rv.itemAnimator = null
@@ -88,6 +92,7 @@ class HomeFragment : Fragment() {
                 photos.addAll(it)
                 rvAdapter.notifyItemRangeInserted(oldCount, photos.size)
             }
+            binding.swipeRefreshLayout.isRefreshing = false
         })
     }
 

@@ -21,9 +21,6 @@
             android:name=".edit.EditImageActivity"
             android:exported="true" />
         <activity
-            android:name=".activities.EditActivity"
-            android:exported="true" />
-        <activity
             android:name=".activities.SearchPhotoActivity"
             android:exported="true" />
         <activity

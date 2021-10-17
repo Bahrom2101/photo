@@ -147,7 +147,7 @@ class PopularPhotoActivity : AppCompatActivity() {
     private fun loadPhotos() {
         viewModel = ViewModelProvider(this).get(PhotosViewModel::class.java)
         viewModel.getPhotos(currentPopularPagePhotos)
-            .observe(this, androidx.lifecycle.Observer {
+            .observe(this, {
                 if (it != null) {
                     binding.progress.visibility = View.GONE
                     val oldCount = popularPhotos.size
@@ -207,7 +207,7 @@ class PopularPhotoActivity : AppCompatActivity() {
                     destinationDirectory,
                     getString(R.string.app_name) + File.separator + photoDb.id + ".jpg"
                 )
-                val enqueue = downloadManager.enqueue(request)
+                downloadManager.enqueue(request)
             } else {
                 Toast.makeText(this, "No Internet", Toast.LENGTH_SHORT).show()
             }
@@ -217,16 +217,16 @@ class PopularPhotoActivity : AppCompatActivity() {
                 AlertDialog.Builder(this)
                     .setMessage("Please accept our permissions")
                     .setPositiveButton("yes") { _, _ ->
-                        e.askAgain();
+                        e.askAgain()
                     } //ask again
                     .setNegativeButton("no") { dialog, _ ->
-                        dialog.dismiss();
+                        dialog.dismiss()
                     }
-                    .show();
+                    .show()
             }
 
             if (e.hasForeverDenied()) {
-                e.goToSettings();
+                e.goToSettings()
             }
         }
     }

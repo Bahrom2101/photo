@@ -1,1 +1,1 @@
-This app does not completed yet
+Enjoy photos and code

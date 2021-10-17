@@ -27,6 +27,7 @@ import uz.mobilestudio.photo.adpters.SliderDbAdapter
 import uz.mobilestudio.photo.adpters.SliderRvAdapter
 import uz.mobilestudio.photo.databinding.ActivityPhotoDbBinding
 import uz.mobilestudio.photo.db.AppDatabase
+import uz.mobilestudio.photo.edit.EditImageActivity
 import uz.mobilestudio.photo.entity.PhotoDb
 import uz.mobilestudio.photo.fragments.HomeFragment
 import uz.mobilestudio.photo.fragments.LikedFragment.Companion.currentPhotoDbPos
@@ -57,8 +58,6 @@ class PhotoDbActivity : AppCompatActivity() {
 
         appDatabase = AppDatabase.getInstance(this)
 
-        val calendar = Calendar.getInstance()
-        val time = calendar.time.time
         var photoDb = photosDb[pos]
 
         checkDb(photoDb.id)
@@ -96,6 +95,12 @@ class PhotoDbActivity : AppCompatActivity() {
 
         binding.download.setOnClickListener {
             onDownloadClick(photoDb)
+        }
+
+        binding.effect.setOnClickListener {
+            val intent = Intent(this, EditImageActivity::class.java)
+            intent.putExtra("photoDb",photoDb)
+            startActivity(intent)
         }
 
     }

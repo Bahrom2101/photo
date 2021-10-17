@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 import uz.mobilestudio.photo.R
 import uz.mobilestudio.photo.databinding.FragmentRandomBinding
 import uz.mobilestudio.photo.db.AppDatabase
+import uz.mobilestudio.photo.edit.EditImageActivity
 import uz.mobilestudio.photo.entity.PhotoDb
 import uz.mobilestudio.photo.models.NetworkHelper
 import uz.mobilestudio.photo.view_models.PhotosViewModel
@@ -57,6 +58,7 @@ class RandomFragment : Fragment() {
     ): View {
         binding = FragmentRandomBinding.inflate(layoutInflater)
 
+        binding.btnRandom.visibility = View.GONE
         binding.share.visibility = View.GONE
         binding.download.visibility = View.GONE
         binding.setBackground.visibility = View.GONE
@@ -87,6 +89,12 @@ class RandomFragment : Fragment() {
             onDownloadClick(photoDb)
         }
 
+        binding.effect.setOnClickListener {
+            val intent = Intent(requireContext(), EditImageActivity::class.java)
+            intent.putExtra("photoDb",photoDb)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 
@@ -95,6 +103,7 @@ class RandomFragment : Fragment() {
         viewModel.getRandomPhoto().observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 binding.progress.visibility = View.GONE
+                binding.btnRandom.visibility = View.VISIBLE
                 binding.share.visibility = View.VISIBLE
                 binding.download.visibility = View.VISIBLE
                 binding.setBackground.visibility = View.VISIBLE

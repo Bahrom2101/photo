@@ -52,6 +52,7 @@
         android:background="@color/semi_black_transparent"
         android:padding="8dp"
         android:src="@drawable/ic_gallery"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/rvConstraintTools"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -62,6 +63,7 @@
         android:background="@color/semi_black_transparent"
         android:padding="8dp"
         android:src="@drawable/ic_camera"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/rvConstraintTools"
         app:layout_constraintStart_toEndOf="@id/imgGallery" />
 
@@ -134,6 +136,7 @@
         android:background="@color/semi_black_transparent"
         android:padding="8dp"
         android:src="@drawable/ic_share"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/photoEditorView"
         app:layout_constraintEnd_toStartOf="@+id/imgUndo"
         app:layout_constraintStart_toEndOf="@+id/imgCamera" />

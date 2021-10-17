@@ -30,6 +30,7 @@ import uz.mobilestudio.photo.activities.SearchActivity.Companion.searchPhotos
 import uz.mobilestudio.photo.adpters.SliderRvAdapter
 import uz.mobilestudio.photo.databinding.ActivitySearchPhotoBinding
 import uz.mobilestudio.photo.db.AppDatabase
+import uz.mobilestudio.photo.edit.EditImageActivity
 import uz.mobilestudio.photo.entity.PhotoDb
 import uz.mobilestudio.photo.fragments.PopularFragment
 import uz.mobilestudio.photo.models.NetworkHelper
@@ -123,6 +124,12 @@ class SearchPhotoActivity : AppCompatActivity() {
 
         binding.download.setOnClickListener {
             onDownloadClick(photoDb)
+        }
+
+        binding.effect.setOnClickListener {
+            val intent = Intent(this, EditImageActivity::class.java)
+            intent.putExtra("photoDb",photoDb)
+            startActivity(intent)
         }
 
     }

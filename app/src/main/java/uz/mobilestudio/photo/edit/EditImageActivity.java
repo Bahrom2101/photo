@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.ChangeBounds;
 import androidx.transition.TransitionManager;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.io.File;
@@ -101,6 +102,8 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
         PhotoDb photoDb = ((PhotoDb) intent.getSerializableExtra("photoDb"));
 
         mPhotoEditorView = findViewById(R.id.photoEditorView);
+
+        Glide.with(this).load(photoDb.getUrlRegular()).into(mPhotoEditorView.getSource());
 
         initViews();
 

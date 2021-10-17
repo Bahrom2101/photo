@@ -26,6 +26,7 @@ import uz.mobilestudio.photo.R
 import uz.mobilestudio.photo.adpters.SliderRvAdapter
 import uz.mobilestudio.photo.databinding.ActivityPopularPhotoBinding
 import uz.mobilestudio.photo.db.AppDatabase
+import uz.mobilestudio.photo.edit.EditImageActivity
 import uz.mobilestudio.photo.entity.PhotoDb
 import uz.mobilestudio.photo.fragments.PopularFragment.Companion.currentPopularPagePhotos
 import uz.mobilestudio.photo.fragments.PopularFragment.Companion.currentPopularPos
@@ -122,6 +123,12 @@ class PopularPhotoActivity : AppCompatActivity() {
 
         binding.download.setOnClickListener {
             onDownloadClick(photoDb)
+        }
+
+        binding.effect.setOnClickListener {
+            val intent = Intent(this, EditImageActivity::class.java)
+            intent.putExtra("photoDb",photoDb)
+            startActivity(intent)
         }
 
     }

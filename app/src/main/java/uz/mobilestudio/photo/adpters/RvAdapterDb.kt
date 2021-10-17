@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import uz.mobilestudio.photo.databinding.ItemPhotoBinding
 import uz.mobilestudio.photo.entity.PhotoDb
 import uz.mobilestudio.photo.models.api.all_photos.Photo
@@ -14,7 +15,8 @@ class RvAdapterDb(val context: Context, var list: List<PhotoDb>, var onClickList
     inner class ViewHolder(var itemPhotoBinding: ItemPhotoBinding) :
         RecyclerView.ViewHolder(itemPhotoBinding.root) {
         fun onBind(photoDb: PhotoDb,position: Int) {
-            Glide.with(context).load(photoDb.urlSmall).into(itemPhotoBinding.image)
+            Glide.with(context).load(photoDb.urlSmall)
+                .into(itemPhotoBinding.image)
 
             itemPhotoBinding.root.setOnClickListener {
                 onClickListener.onPhotoClick(photoDb,position)

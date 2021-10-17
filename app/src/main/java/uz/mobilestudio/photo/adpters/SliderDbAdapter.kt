@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import uz.mobilestudio.photo.databinding.ItemPhotoSlideBinding
 import uz.mobilestudio.photo.entity.PhotoDb
 import uz.mobilestudio.photo.models.api.all_photos.Photo

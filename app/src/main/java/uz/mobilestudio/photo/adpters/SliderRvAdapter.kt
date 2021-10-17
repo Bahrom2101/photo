@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import uz.mobilestudio.photo.databinding.ItemPhotoSlideBinding
 import uz.mobilestudio.photo.models.api.all_photos.Photo
 import kotlin.math.abs
@@ -28,7 +29,10 @@ class SliderRvAdapter(
             } else {
                 binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
             }
-            Glide.with(context).load(list[position].urls.regular).into(binding.image)
+            Glide.with(context)
+                .load(list[position].urls.regular)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(binding.image)
         }
     }
 

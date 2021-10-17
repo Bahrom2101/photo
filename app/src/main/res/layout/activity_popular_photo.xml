@@ -48,7 +48,7 @@
             android:layout_gravity="center"
             android:layout_margin="12dp"
             android:background="@drawable/background_button_image"
-            android:padding="@dimen/_9sdp"
+            android:padding="@dimen/_8sdp"
             android:src="@drawable/ic_download"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />

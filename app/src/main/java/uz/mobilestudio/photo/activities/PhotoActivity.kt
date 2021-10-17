@@ -30,6 +30,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import uz.mobilestudio.photo.adpters.SliderRvAdapter
+import uz.mobilestudio.photo.edit.EditImageActivity
 import uz.mobilestudio.photo.fragments.HomeFragment
 import uz.mobilestudio.photo.fragments.HomeFragment.Companion.currentPos
 import uz.mobilestudio.photo.fragments.HomeFragment.Companion.photos
@@ -121,6 +122,12 @@ class PhotoActivity : AppCompatActivity() {
 
         binding.download.setOnClickListener {
             onDownloadClick(photoDb)
+        }
+
+        binding.effect.setOnClickListener {
+            val intent = Intent(this,EditImageActivity::class.java)
+            intent.putExtra("photoDb",photoDb)
+            startActivity(intent)
         }
 
     }

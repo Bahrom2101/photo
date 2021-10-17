@@ -67,6 +67,10 @@ class RandomFragment : Fragment() {
 
         loadPhoto()
 
+        binding.btnRandom.setOnClickListener {
+            loadPhoto()
+        }
+
         binding.share.setOnClickListener {
             onShareClick(photoDb)
         }

@@ -1,5 +1,6 @@
 package uz.mobilestudio.photo.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -25,6 +26,6 @@ interface PhotoDbDao {
     fun photoCount(id: String): Single<Int>
 
     @Query("select * from photos order by time desc")
-    fun getAllPhotos(): Flowable<List<PhotoDb>>
+    fun getAllPhotos(): LiveData<List<PhotoDb>>
 
 }

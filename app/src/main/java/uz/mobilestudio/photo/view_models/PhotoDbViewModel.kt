@@ -2,6 +2,7 @@ package uz.mobilestudio.photo.view_models
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import uz.mobilestudio.photo.db.AppDatabase
@@ -11,7 +12,7 @@ class PhotoDbViewModel(application: Application) : AndroidViewModel(application)
 
     private val appDatabase = AppDatabase.getInstance(application.applicationContext)
 
-    fun getAllPhotoDb(): Flowable<List<PhotoDb>> {
+    fun getAllPhotoDb(): LiveData<List<PhotoDb>> {
         return appDatabase.photoDbDao().getAllPhotos()
     }
 

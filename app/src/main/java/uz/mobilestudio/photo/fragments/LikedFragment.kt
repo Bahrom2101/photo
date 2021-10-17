@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -73,22 +74,16 @@ class LikedFragment : Fragment() {
     @SuppressLint("CheckResult")
     private fun loadPhotosDb() {
         viewModel = ViewModelProvider(this).get(PhotoDbViewModel::class.java)
-        val compositeDisposable = CompositeDisposable()
-        compositeDisposable.add(
-            viewModel.getAllPhotoDb()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (photosDb.size > 0) {
-                        photosDb.clear()
-                    }
-                    val oldCount = photosDb.size
-                    photosDb.addAll(it)
-                    rvAdapterDb.notifyItemRangeInserted(oldCount, photosDb.size)
-                    binding.progress.visibility = View.GONE
-                    compositeDisposable.dispose()
-                }
-        )
+        viewModel.getAllPhotoDb().observe(viewLifecycleOwner,Observer {
+            if (photosDb.size > 0) {
+                photosDb.clear()
+            }
+            val oldCount = photosDb.size
+            photosDb.addAll(it)
+            rvAdapterDb.notifyItemRangeInserted(oldCount, photosDb.size)
+            binding.progress.visibility = View.GONE
+
+        })
     }
 
     override fun onStart() {

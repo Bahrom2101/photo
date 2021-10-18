@@ -9,7 +9,9 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Environment
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +24,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.github.florent37.runtimepermission.kotlin.askPermission
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineName
@@ -51,12 +56,23 @@ class RandomFragment : Fragment() {
     private val scope = CoroutineScope(CoroutineName("MyScope2"))
     lateinit var photoDb: PhotoDb
     lateinit var appDatabase: AppDatabase
+    private val TAG = "RandomFragment"
+
+    val AD_UNIT_ID = "ca-app-pub-1320902743449340/8701300370"
+    private var mInterstitialAd: InterstitialAd? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRandomBinding.inflate(layoutInflater)
+
+        MobileAds.initialize(requireContext()) {}
+
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder()
+                .build()
+        )
 
         binding.btnRandom.visibility = View.GONE
         binding.share.visibility = View.GONE
@@ -86,8 +102,11 @@ class RandomFragment : Fragment() {
         }
 
         binding.download.setOnClickListener {
+            showInterstitial()
             onDownloadClick(photoDb)
         }
+
+        loadAd()
 
         binding.effect.setOnClickListener {
             val intent = Intent(requireContext(), EditImageActivity::class.java)
@@ -96,6 +115,56 @@ class RandomFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+
+    private fun showInterstitial() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    Log.d(TAG, "Ad was dismissed.")
+                    // Don't forget to set the ad reference to null so you
+                    // don't show the ad a second time.
+                    mInterstitialAd = null
+                    loadAd()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                    Log.d(TAG, "Ad failed to show.")
+                    // Don't forget to set the ad reference to null so you
+                    // don't show the ad a second time.
+                    mInterstitialAd = null
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    Log.d(TAG, "Ad showed fullscreen content.")
+                    // Called when ad is dismissed.
+                }
+            }
+            mInterstitialAd?.show(requireActivity())
+        } else {
+//            Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
+            loadAd()
+        }
+    }
+
+    private fun loadAd() {
+        val adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            requireContext(), AD_UNIT_ID, adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d(TAG, adError.message)
+                    mInterstitialAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d(TAG, "Ad was loaded.")
+                    mInterstitialAd = interstitialAd
+                }
+            }
+        )
     }
 
     private fun loadPhoto() {

@@ -26,9 +26,15 @@ import java.lang.Exception
 import java.net.URL
 import java.util.*
 import android.os.*
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.initialization.InitializationStatus
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import uz.mobilestudio.photo.adpters.SliderRvAdapter
 import uz.mobilestudio.photo.edit.EditImageActivity
 import uz.mobilestudio.photo.fragments.HomeFragment
@@ -46,6 +52,9 @@ class PhotoActivity : AppCompatActivity() {
     private val scope = CoroutineScope(CoroutineName("MyScope"))
     private val TAG = "HomeFragment1"
 
+    val AD_UNIT_ID = "ca-app-pub-1320902743449340/8701300370"
+    private var mInterstitialAd: InterstitialAd? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoBinding.inflate(layoutInflater)
@@ -54,6 +63,14 @@ class PhotoActivity : AppCompatActivity() {
         val pos = intent.getIntExtra("position", 0)
 
         currentPos = pos
+
+        MobileAds.initialize(this) {}
+
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder()
+//                .setTestDeviceIds(listOf("D9F33D1B33717E45FC40B9496E86EA5E"))
+                .build()
+        )
 
         appDatabase = AppDatabase.getInstance(this)
 
@@ -83,7 +100,7 @@ class PhotoActivity : AppCompatActivity() {
             })
         binding.viewPager.adapter = sliderRvAdapter
 
-        binding.viewPager.setCurrentItem(pos,false)
+        binding.viewPager.setCurrentItem(pos, false)
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -121,15 +138,75 @@ class PhotoActivity : AppCompatActivity() {
         }
 
         binding.download.setOnClickListener {
+            showInterstitial()
             onDownloadClick(photoDb)
         }
 
+        loadAd()
+
         binding.effect.setOnClickListener {
-            val intent = Intent(this,EditImageActivity::class.java)
-            intent.putExtra("photoDb",photoDb)
+            val intent = Intent(this, EditImageActivity::class.java)
+            intent.putExtra("photoDb", photoDb)
             startActivity(intent)
         }
 
+    }
+
+    private fun showInterstitial() {
+        if (mInterstitialAd != null) {
+            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    Log.d(TAG, "Ad was dismissed.")
+                    // Don't forget to set the ad reference to null so you
+                    // don't show the ad a second time.
+                    mInterstitialAd = null
+                    loadAd()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                    Log.d(TAG, "Ad failed to show.")
+                    // Don't forget to set the ad reference to null so you
+                    // don't show the ad a second time.
+                    mInterstitialAd = null
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    Log.d(TAG, "Ad showed fullscreen content.")
+                    // Called when ad is dismissed.
+                }
+            }
+            mInterstitialAd?.show(this)
+        } else {
+//            Toast.makeText(this, "Ad wasn't loaded.", Toast.LENGTH_SHORT).show()
+            loadAd()
+        }
+    }
+
+    private fun loadAd() {
+        val adRequest = AdRequest.Builder().build()
+
+        InterstitialAd.load(
+            this, AD_UNIT_ID, adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d(TAG, adError.message)
+                    mInterstitialAd = null
+                    val error = "domain: ${adError.domain}, code: ${adError.code}, " +
+                            "message: ${adError.message}"
+//                    Toast.makeText(
+//                        this@PhotoActivity,
+//                        "onAdFailedToLoad() with error $error",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d(TAG, "Ad was loaded.")
+                    mInterstitialAd = interstitialAd
+//                    Toast.makeText(this@PhotoActivity, "onAdLoaded()", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
     }
 
     private fun onShareClick(photoDb: PhotoDb) {

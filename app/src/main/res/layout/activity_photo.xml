@@ -7,6 +7,16 @@
     android:background="@color/main"
     tools:context=".activities.PhotoActivity">
 
+<!--    <com.google.android.gms.ads.AdView-->
+<!--        xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+<!--        android:id="@+id/adView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        ads:adSize="INTERSTITIAL"-->
+<!--        ads:adUnitId="ca-app-pub-1320902743449340/8701300370">-->
+<!--    </com.google.android.gms.ads.AdView>-->
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"

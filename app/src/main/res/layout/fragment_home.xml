@@ -20,6 +20,7 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             android:paddingBottom="@dimen/_45sdp"
+            tools:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             tools:listitem="@layout/item_photo" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

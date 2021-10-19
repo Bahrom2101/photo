@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import uz.mobilestudio.photo.R
 import uz.mobilestudio.photo.databinding.ActivityMainBinding
 import uz.mobilestudio.photo.fragments.HomeFragment
@@ -18,7 +17,6 @@ import uz.mobilestudio.photo.fragments.RandomFragment
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,9 +81,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.search -> {
-                val intent = Intent(this,SearchActivity::class.java)
+                val intent = Intent(this, SearchActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -96,10 +94,5 @@ class MainActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
-    }
-
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

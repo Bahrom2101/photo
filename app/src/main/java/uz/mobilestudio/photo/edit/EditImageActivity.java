@@ -2,6 +2,7 @@ package uz.mobilestudio.photo.edit;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+import static com.github.florent37.runtimepermission.RuntimePermission.askPermission;
 import static uz.mobilestudio.photo.edit.FileSaveHelper.isSdkHigherThan28;
 
 import android.Manifest;
@@ -34,6 +35,7 @@ import androidx.transition.ChangeBounds;
 import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
+import com.github.florent37.runtimepermission.PermissionResult;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -355,9 +357,26 @@ public class EditImageActivity extends BaseActivity implements OnPhotoEditorList
                 break;
 
             case R.id.imgCamera:
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                break;
+                askPermission(this)
+                        .request(Manifest.permission.CAMERA)
+                        .onAccepted((result) -> {
+                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                        })
+                        .onDenied((result) -> {
+                            new AlertDialog.Builder(this)
+                                    .setMessage("Please accept our permissions")
+                                    .setPositiveButton("yes", (dialog, which) -> {
+                                        result.askAgain();
+                                    }) // ask again
+                                    .setNegativeButton("no", (dialog, which) -> {
+                                        dialog.dismiss();
+                                    })
+                                    .show();
+
+                        })
+                        .onForeverDenied(PermissionResult::goToSettings)
+                        .ask();break;
 
             case R.id.imgGallery:
                 Intent intent = new Intent();

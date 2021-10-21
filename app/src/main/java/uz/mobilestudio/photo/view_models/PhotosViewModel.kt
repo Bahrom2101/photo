@@ -14,7 +14,7 @@ class PhotosViewModel : ViewModel() {
     private val photosRepository = PhotosRepository()
 
     fun getPhotos(page: Int): LiveData<List<Photo>> {
-        return photosRepository.getPhotos(ACCESS_KEYS[Random.nextInt(0, 8)], page, PER_PAGE)
+        return photosRepository.getPhotos(ACCESS_KEYS[Random.nextInt(0, ACCESS_KEYS.size)], page, PER_PAGE)
     }
 
     fun getPopularPhotos(page: Int): LiveData<List<Photo>> {
@@ -27,12 +27,12 @@ class PhotosViewModel : ViewModel() {
     }
 
     fun getRandomPhoto(): LiveData<Photo> {
-        return photosRepository.getRandomPhoto(ACCESS_KEYS[Random.nextInt(0, 8)])
+        return photosRepository.getRandomPhoto(ACCESS_KEYS[Random.nextInt(0, ACCESS_KEYS.size)])
     }
 
 
     fun getSearchedPhotos(page: Int, query: String): LiveData<SearchResponse> {
-        return photosRepository.getSearchedPhotos(ACCESS_KEYS[Random.nextInt(0, 8)], page, PER_PAGE, query)
+        return photosRepository.getSearchedPhotos(ACCESS_KEYS[Random.nextInt(0, ACCESS_KEYS.size)], page, PER_PAGE, query)
     }
 
 }

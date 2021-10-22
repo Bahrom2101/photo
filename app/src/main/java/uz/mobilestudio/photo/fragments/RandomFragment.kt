@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.github.florent37.runtimepermission.kotlin.askPermission
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -110,7 +111,7 @@ class RandomFragment : Fragment() {
 
         binding.effect.setOnClickListener {
             val intent = Intent(requireContext(), EditImageActivity::class.java)
-            intent.putExtra("photoDb",photoDb)
+            intent.putExtra("photoDb", photoDb)
             startActivity(intent)
         }
 
@@ -183,7 +184,9 @@ class RandomFragment : Fragment() {
                 } else {
                     binding.image.scaleType = ImageView.ScaleType.FIT_CENTER
                 }
-                Glide.with(this).load(it.urls.regular).into(binding.image)
+                Glide.with(this).load(it.urls.regular)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .into(binding.image)
                 val calendar = Calendar.getInstance()
                 val time = calendar.time.time
                 photoDb = PhotoDb(
@@ -208,7 +211,7 @@ class RandomFragment : Fragment() {
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Hilol Test")
         sharingIntent.putExtra(
             Intent.EXTRA_TEXT,
-            "Rasmni yuklab oling: ${photoDb.urlRegular}"
+            photoDb.urlRegular
         )
         startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }

@@ -16,6 +16,7 @@ class RvAdapterDb(val context: Context, var list: List<PhotoDb>, var onClickList
         RecyclerView.ViewHolder(itemPhotoBinding.root) {
         fun onBind(photoDb: PhotoDb,position: Int) {
             Glide.with(context).load(photoDb.urlSmall)
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(itemPhotoBinding.image)
 
             itemPhotoBinding.root.setOnClickListener {

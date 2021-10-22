@@ -31,7 +31,7 @@ class SliderRvAdapter(
             }
             Glide.with(context)
                 .load(list[position].urls.regular)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(binding.image)
         }
     }

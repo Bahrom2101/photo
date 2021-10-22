@@ -27,6 +27,10 @@
     <string name="label_line">Line</string>
     <string name="label_oval">Oval</string>
     <string name="label_rectangle">Rectangle</string>
+    <string name="clear_cache">Clear cache</string>
+    <string name="ask_clear_cache">Do you want clearing the caches ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string-array name="photo_editor_emoji">
 

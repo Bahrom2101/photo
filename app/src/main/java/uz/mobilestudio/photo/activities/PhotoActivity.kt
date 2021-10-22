@@ -215,7 +215,7 @@ class PhotoActivity : AppCompatActivity() {
         sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Hilol Test")
         sharingIntent.putExtra(
             Intent.EXTRA_TEXT,
-            "Rasmni yuklab oling: ${photoDb.urlRegular}"
+            photoDb.urlRegular
         )
         startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }

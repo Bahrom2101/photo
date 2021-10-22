@@ -90,9 +90,6 @@ dependencies {
     //Photo Editor
     implementation 'com.burhanrashid52:photoeditor:1.5.1'
 
-    //ads
-    implementation 'com.google.android.gms:play-services-ads:20.4.0'
-
     //circle imageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

@@ -22,10 +22,6 @@
         tools:ignore="AllowBackup"
         tools:targetApi="m">
 
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1320902743449340~2645854453" />
-
         <activity
             android:name=".edit.EditImageActivity"
             android:exported="true" />

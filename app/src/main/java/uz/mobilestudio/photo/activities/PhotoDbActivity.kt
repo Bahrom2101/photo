@@ -19,9 +19,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.github.florent37.runtimepermission.kotlin.askPermission
-import com.google.android.gms.ads.*
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineName
@@ -52,9 +49,6 @@ class PhotoDbActivity : AppCompatActivity() {
     private val scope = CoroutineScope(CoroutineName("MyScope3"))
     private val TAG = "PhotoDbActivity"
 
-    val AD_UNIT_ID = "ca-app-pub-1320902743449340/8701300370"
-    private var mInterstitialAd: InterstitialAd? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoDbBinding.inflate(layoutInflater)
@@ -63,13 +57,6 @@ class PhotoDbActivity : AppCompatActivity() {
         val pos = intent.getIntExtra("position", 0)
 
         currentPhotoDbPos = pos
-
-        MobileAds.initialize(this) {}
-
-        MobileAds.setRequestConfiguration(
-            RequestConfiguration.Builder()
-                .build()
-        )
 
         appDatabase = AppDatabase.getInstance(this)
 
@@ -109,11 +96,8 @@ class PhotoDbActivity : AppCompatActivity() {
         }
 
         binding.download.setOnClickListener {
-            showInterstitial()
             onDownloadClick(photoDb)
         }
-
-        loadAd()
 
         binding.effect.setOnClickListener {
             val intent = Intent(this, EditImageActivity::class.java)
@@ -121,54 +105,6 @@ class PhotoDbActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-    }
-
-    private fun showInterstitial() {
-        if (mInterstitialAd != null) {
-            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() {
-                    Log.d(TAG, "Ad was dismissed.")
-                    // Don't forget to set the ad reference to null so you
-                    // don't show the ad a second time.
-                    mInterstitialAd = null
-                    loadAd()
-                }
-
-                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
-                    Log.d(TAG, "Ad failed to show.")
-                    // Don't forget to set the ad reference to null so you
-                    // don't show the ad a second time.
-                    mInterstitialAd = null
-                }
-
-                override fun onAdShowedFullScreenContent() {
-                    Log.d(TAG, "Ad showed fullscreen content.")
-                    // Called when ad is dismissed.
-                }
-            }
-            mInterstitialAd?.show(this)
-        } else {
-            loadAd()
-        }
-    }
-
-    private fun loadAd() {
-        val adRequest = AdRequest.Builder().build()
-
-        InterstitialAd.load(
-            this, AD_UNIT_ID, adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d(TAG, adError.message)
-                    mInterstitialAd = null
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    Log.d(TAG, "Ad was loaded.")
-                    mInterstitialAd = interstitialAd
-                }
-            }
-        )
     }
 
     private fun onShareClick(photoDb: PhotoDb) {

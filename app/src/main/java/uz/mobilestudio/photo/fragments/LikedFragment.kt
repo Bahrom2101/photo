@@ -51,7 +51,6 @@ class LikedFragment : Fragment() {
         photosDb = ArrayList()
         photosDb.clear()
         currentPhotoDbPos = 0
-
         loadPhotosDb()
 
         rvAdapterDb = RvAdapterDb(requireContext(), photosDb, object : RvAdapterDb.OnClickListener {
